@@ -3,25 +3,25 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Prompt DED Arsitek</title>
-<meta name="theme-color" content="#233b57">
+<title>Prompt DED Arsitektural 2027</title>
+<meta name="theme-color" content="#1f5137">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/png" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Prompt DED">
+<meta name="apple-mobile-web-app-title" content="Prompt DED 2027">
 <style>
 :root{
-  --navy:#233b57;--navy-2:#2f4c6e;--bg:#f1ece2;--card:#faf8f3;--line:#e2d9c8;
-  --ink:#1d2430;--muted:#5d6b7c;--accent:#9c6a2e;--accent-ink:#fff;--green:#3f7a4f;
+  --navy:#1f5137;--navy-2:#2b6a4a;--bg:#f1ece2;--card:#faf8f3;--line:#e2d9c8;
+  --ink:#1c2620;--muted:#5b6b62;--accent:#9c6a2e;--accent-ink:#fff;--green:#2f7a52;
   --note:#e8dfd0;--mono:ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",monospace;
-  --on-navy:#fff;--toast-bg:#1d2430;--toast-fg:#fff;
+  --on-navy:#fff;--toast-bg:#1c2620;--toast-fg:#fff;
 }
 @media (prefers-color-scheme:dark){
-  :root:not([data-theme="light"]){--bg:#161b22;--card:#1f262f;--line:#323c48;--ink:#e8ebef;--muted:#9aa7b6;--note:#2a2620;--navy:#1b2e45;--navy-2:#2a4363;--toast-bg:#e8ebef;--toast-fg:#161b22;color-scheme:dark}
+  :root:not([data-theme="light"]){--bg:#141a17;--card:#1e2621;--line:#2f3b34;--ink:#e8ebef;--muted:#9aaba1;--note:#2a2620;--navy:#173d2a;--navy-2:#22573c;--toast-bg:#e8ebef;--toast-fg:#141a17;color-scheme:dark}
 }
-:root[data-theme="dark"]{--bg:#161b22;--card:#1f262f;--line:#323c48;--ink:#e8ebef;--muted:#9aa7b6;--note:#2a2620;--navy:#1b2e45;--navy-2:#2a4363;--toast-bg:#e8ebef;--toast-fg:#161b22;color-scheme:dark}
+:root[data-theme="dark"]{--bg:#141a17;--card:#1e2621;--line:#2f3b34;--ink:#e8ebef;--muted:#9aaba1;--note:#2a2620;--navy:#173d2a;--navy-2:#22573c;--toast-bg:#e8ebef;--toast-fg:#141a17;color-scheme:dark}
 *{box-sizing:border-box}
 html,body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
 button,input,select,textarea{font:inherit;color:inherit}
@@ -89,7 +89,7 @@ form textarea{min-height:64px;resize:vertical}
 <body>
 <div class="app">
   <header>
-    <div class="topline"><div class="eyebrow">25 preset · prompt DED arsitek</div><button id="installBtn" class="install" hidden>Pasang di HP</button></div>
+    <div class="topline"><div class="eyebrow">Prompt DED Arsitektural 2027</div><button id="installBtn" class="install" hidden>Pasang di HP</button></div>
     <h1>Dari prompt sampai lembar DED</h1>
     <nav class="tabs" id="tabs">
       <button data-tab="preset" class="on">Preset</button>
@@ -326,7 +326,7 @@ function bind(){
   m.querySelectorAll('[data-kertas]').forEach(b=>b.onclick=()=>{OPT.kertas=b.dataset.kertas;m.querySelectorAll('[data-kertas]').forEach(x=>x.classList.toggle('on',x===b));refreshPrompt()});
   m.querySelectorAll('[data-bahasa]').forEach(b=>b.onclick=()=>{OPT.bahasa=b.dataset.bahasa;m.querySelectorAll('[data-bahasa]').forEach(x=>x.classList.toggle('on',x===b));refreshPrompt()});
   m.querySelector('[data-copy]')?.addEventListener('click',()=>copyText(currentPrompt()));
-  m.querySelector('[data-share]')?.addEventListener('click',()=>sharePrompt(currentPrompt(),'Prompt DED'));
+  m.querySelector('[data-share]')?.addEventListener('click',()=>sharePrompt(currentPrompt(),'Prompt DED Arsitektural 2027'));
   m.querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>{
     const d=all().find(p=>p.kode===b.dataset.edit);
     F={...d,ruang:[...d.ruang,'','',''].slice(0,3)};

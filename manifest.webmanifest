@@ -1,6 +1,6 @@
 {
-  "name": "Prompt DED Arsitek",
-  "short_name": "Prompt DED",
+  "name": "Prompt DED Arsitektural 2027",
+  "short_name": "Prompt DED 2027",
   "description": "Generator prompt lembar DED arsitektur: 25 preset dan formulir prompt buatan sendiri.",
   "lang": "id",
   "start_url": "./",
@@ -8,7 +8,7 @@
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#f1ece2",
-  "theme_color": "#233b57",
+  "theme_color": "#1f5137",
   "icons": [
     { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
     { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
