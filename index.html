@@ -1,0 +1,377 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Prompt DED Arsitek</title>
+<meta name="theme-color" content="#233b57">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Prompt DED">
+<style>
+:root{
+  --navy:#233b57;--navy-2:#2f4c6e;--bg:#f1ece2;--card:#faf8f3;--line:#e2d9c8;
+  --ink:#1d2430;--muted:#5d6b7c;--accent:#9c6a2e;--accent-ink:#fff;--green:#3f7a4f;
+  --note:#e8dfd0;--mono:ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",monospace;
+  --on-navy:#fff;--toast-bg:#1d2430;--toast-fg:#fff;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){--bg:#161b22;--card:#1f262f;--line:#323c48;--ink:#e8ebef;--muted:#9aa7b6;--note:#2a2620;--navy:#1b2e45;--navy-2:#2a4363;--toast-bg:#e8ebef;--toast-fg:#161b22;color-scheme:dark}
+}
+:root[data-theme="dark"]{--bg:#161b22;--card:#1f262f;--line:#323c48;--ink:#e8ebef;--muted:#9aa7b6;--note:#2a2620;--navy:#1b2e45;--navy-2:#2a4363;--toast-bg:#e8ebef;--toast-fg:#161b22;color-scheme:dark}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+button,input,select,textarea{font:inherit;color:inherit}
+.app{max-width:720px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column}
+header{background:var(--navy);color:var(--on-navy);padding-block:18px 12px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));position:sticky;top:env(safe-area-inset-top,0px);z-index:5}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--navy)}
+.topline{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.install{border:0;border-radius:999px;background:var(--accent);color:var(--accent-ink);font-weight:700;font-size:13px;padding:6px 12px;cursor:pointer;flex:0 0 auto}
+[hidden]{display:none!important}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.12em;opacity:.8;text-transform:uppercase}
+h1{margin:2px 0 12px;font-size:22px;line-height:1.25}
+.tabs{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none}
+.tabs button{flex:0 0 auto;border:0;border-radius:8px;padding:7px 14px;background:rgba(255,255,255,.14);color:#fff;font-family:var(--mono);font-size:14px;cursor:pointer}
+.tabs button.on{background:#fff;color:var(--navy)}
+main{flex:1;padding-block:16px 120px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));min-width:0}
+h2{font-size:20px;margin:0 0 4px}
+.sub{color:var(--muted);margin:0 0 14px}
+.search{width:100%;padding:11px 14px;border:1px solid var(--line);border-radius:12px;background:var(--card);margin-bottom:10px}
+.chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;margin-bottom:10px;scrollbar-width:none}
+.chip{flex:0 0 auto;border:1px solid var(--line);background:var(--card);border-radius:999px;padding:6px 14px;cursor:pointer;white-space:nowrap}
+.chip.on{background:var(--navy);border-color:var(--navy);color:#fff}
+.list{display:flex;flex-direction:column;gap:10px}
+.item{display:flex;gap:12px;align-items:center;text-align:left;width:100%;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;cursor:pointer}
+.item:hover{border-color:var(--accent)}
+.code{flex:0 0 auto;background:var(--navy);color:#fff;font-family:var(--mono);font-size:13px;border-radius:6px;padding:4px 8px;min-width:62px;text-align:center}
+.item b{display:block;line-height:1.3}
+.item small{color:var(--muted);font-size:14px}
+.empty{color:var(--muted);text-align:center;padding:30px 10px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:12px}
+.card h3{margin:0 0 8px;font-size:17px}
+.kv{display:grid;grid-template-columns:110px 1fr;gap:0}
+.kv div{padding:7px 0;border-bottom:1px dashed var(--line)}
+.kv div:nth-child(odd){color:var(--muted)}
+.prompt{width:100%;min-height:260px;font-family:var(--mono);font-size:13.5px;line-height:1.6;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;resize:vertical;white-space:pre-wrap}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+.btn{flex:1 1 auto;border:0;border-radius:12px;padding:14px 16px;font-weight:700;cursor:pointer;background:var(--navy);color:#fff;text-align:center;text-decoration:none;display:inline-block}
+.btn.accent{background:var(--accent);color:var(--accent-ink)}
+.btn.green{background:var(--green)}
+.btn.ghost{background:transparent;border:1px solid var(--line);color:var(--ink);font-weight:600}
+.btn.small{padding:10px 12px;font-size:14px;flex:0 1 auto}
+.back{background:none;border:0;color:var(--accent);font-weight:700;padding:0;margin-bottom:10px;cursor:pointer}
+.opt{display:flex;flex-direction:column;gap:6px;margin-bottom:10px}
+.opt label{font-size:14px;color:var(--muted)}
+.seg{display:flex;gap:6px;flex-wrap:wrap}
+.seg button{border:1px solid var(--line);background:var(--card);border-radius:8px;padding:6px 12px;cursor:pointer;font-size:14px}
+.seg button.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.note{background:var(--note);border-left:4px solid var(--accent);border-radius:8px;padding:10px 14px;margin:12px 0;font-size:15px}
+form .f{display:flex;flex-direction:column;gap:4px;margin-bottom:12px}
+form label{font-size:14px;color:var(--muted)}
+form input,form select,form textarea{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--card)}
+form textarea{min-height:64px;resize:vertical}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.steps{list-style:none;padding:0;margin:0 0 12px;counter-reset:s}
+.steps li{position:relative;padding:0 0 14px 46px;counter-increment:s}
+.steps li::before{content:counter(s);position:absolute;left:0;top:0;width:32px;height:32px;border-radius:50%;background:var(--navy);color:#fff;display:grid;place-items:center;font-weight:700}
+.steps b{display:block}
+.steps span{color:var(--muted)}
+.els{columns:2;column-gap:18px;padding-left:20px;margin:0;font-size:15px}
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%) translateY(20px);background:var(--toast-bg);color:var(--toast-fg);padding:10px 18px;border-radius:999px;opacity:0;transition:.25s;pointer-events:none;z-index:20;font-size:15px}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.sticky-actions{position:sticky;bottom:0;background:linear-gradient(transparent,var(--bg) 22%);padding:18px 0 10px;margin-top:6px}
+@media (max-width:420px){.els{columns:1}.kv{grid-template-columns:96px 1fr}}
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="topline"><div class="eyebrow">25 preset · prompt DED arsitek</div><button id="installBtn" class="install" hidden>Pasang di HP</button></div>
+    <h1>Dari prompt sampai lembar DED</h1>
+    <nav class="tabs" id="tabs">
+      <button data-tab="preset" class="on">Preset</button>
+      <button data-tab="buat">Buat Sendiri</button>
+      <button data-tab="panduan">Panduan</button>
+    </nav>
+  </header>
+  <main id="main"></main>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ===================== DATA ===================== */
+const CATS={L1:'Rumah 1 Lantai',L2:'Rumah 2 Lantai',L3:'Rumah 3 Lantai & Hook',VIL:'Villa',RUK:'Ruko & Usaha',MY:'Preset Saya'};
+// [kode, kategori, nama, jenis, lokasi, owner, lahan, gaya, lantai, atap, fasad, [ruang lt1, lt2, lt3]]
+const RAW=[
+['L1-01','L1','Rumah 1 Lantai Minimalis 6x12','Rumah tinggal minimalis','Bandung','Pasangan muda dengan 1 anak','6 x 12 m','Modern minimalis',1,'Atap pelana genteng beton','Plester cat putih + aksen kayu',['Teras, R. Tamu-Keluarga, 2 Kamar Tidur, Dapur, KM/WC, Carport']],
+['L1-02','L1','Rumah 1 Lantai Tropis 7x15','Rumah tinggal tropis','Bali','Keluarga kecil','7 x 15 m','Tropis kontemporer',1,'Atap limasan genteng tanah liat, overstek lebar','Batu alam + kisi-kisi kayu',['Teras, R. Tamu, R. Keluarga, 3 Kamar Tidur, Dapur terbuka, 2 KM/WC, Taman belakang, Carport']],
+['L1-03','L1','Rumah 1 Lantai Skandinavia 6x10','Rumah tinggal kompak','Malang','Pekerja muda','6 x 10 m','Scandinavian',1,'Atap pelana curam metal hitam','Panel kayu vertikal + cat putih',['Teras, R. Keluarga + dapur open plan, 2 Kamar Tidur, KM/WC, Area jemur']],
+['L1-04','L1','Rumah 1 Lantai Type 36 Subsidi 6x10','Rumah subsidi tipe 36','Bekasi','Keluarga pembeli rumah pertama','6 x 10 m','Minimalis sederhana',1,'Atap pelana genteng metal','Plester cat polos',['Teras, R. Tamu, 2 Kamar Tidur, Dapur, KM/WC']],
+['L1-05','L1','Rumah 1 Lantai Courtyard 8x15','Rumah tinggal dengan taman dalam','Yogyakarta','Keluarga 4 orang','8 x 15 m','Kontemporer courtyard',1,'Dak beton + atap miring sebagian','Bata ekspos + roster beton',['Teras, R. Tamu, Courtyard tengah, R. Keluarga, R. Makan, Dapur, 3 Kamar Tidur, 2 KM/WC, Carport']],
+['L2-01','L2','Rumah 2 Lantai Modern Minimalis 6x12','Rumah tinggal 2 lantai','Jakarta','Keluarga muda','6 x 12 m','Modern minimalis',2,'Dak beton + parapet','Plester cat abu-abu + roster beton',['Carport, Teras, R. Tamu, R. Keluarga, Dapur, KM/WC','KT Utama + KM dalam, 2 Kamar Tidur, KM/WC, Balkon']],
+['L2-02','L2','Rumah 2 Lantai Tropis dengan Void 8x15','Rumah tinggal dengan void','Bali','Keluarga 5 orang','8 x 15 m','Tropis kontemporer',2,'Atap pelana lebar genteng','Kayu, batu paras, kisi-kisi',['Teras, R. Tamu, R. Keluarga dengan void (double height), R. Makan, Dapur, KT Tamu, KM/WC, Kolam ikan','KT Utama + walk-in closet, 2 Kamar Tidur, KM/WC, Mezanin baca']],
+['L2-03','L2','Rumah 2 Lantai Industrial 6x14','Rumah tinggal industrial','Surabaya','Pasangan pekerja kreatif','6 x 14 m','Industrial',2,'Dak beton + skylight','Bata ekspos, beton ekspos, besi hollow hitam',['Carport, R. Tamu, Dapur + bar, R. Makan, KM/WC','KT Utama, KT Anak, R. Kerja, KM/WC']],
+['L2-04','L2','Rumah 2 Lantai Japandi 7x13','Rumah tinggal Japandi','Yogyakarta','Keluarga kecil','7 x 13 m','Japandi',2,'Atap pelana landai genteng flat','Kayu natural, plester krem, kisi kayu',['Genkan/teras, R. Keluarga, Dapur + R. Makan, KT Tamu, KM/WC, Taman batu','KT Utama, KT Anak, R. Tatami, KM/WC']],
+['L2-05','L2','Rumah 2 Lantai Klasik Modern 8x16','Rumah tinggal klasik modern','Semarang','Keluarga mapan','8 x 16 m','Klasik modern',2,'Atap perisai genteng keramik','Profil list, kolom klasik, cat putih gading',['Teras berkolom, R. Tamu, R. Keluarga, R. Makan, Dapur, KT ART, KM/WC, Carport','KT Utama + KM dalam, 2 Kamar Tidur, R. Keluarga atas, KM/WC, Balkon']],
+['L3-01','L3','Rumah 3 Lantai Hook 8x12','Rumah hook (posisi sudut)','Jakarta','Keluarga 4 orang','8 x 12 m','Modern minimalis',3,'Dak beton + atap pelana sebagian','Dua muka bangunan (hook), plester + panel GRC',['Carport, R. Tamu, Dapur, R. Makan, KM/WC','R. Keluarga, 2 Kamar Tidur, KM/WC','KT Utama + KM dalam, R. Kerja, Rooftop garden']],
+['L3-02','L3','Rumah Kos Eksklusif 3 Lantai 6x15','Rumah kos eksklusif','Depok','Investor properti','6 x 15 m','Kontemporer',3,'Dak beton + atap metal sebagian','Plester cat + panel kayu sintetis',['Parkir motor, R. Penjaga, Dapur bersama, 2 Kamar kos + KM dalam','4 Kamar kos + KM dalam, Selasar','4 Kamar kos + KM dalam, Area jemur']],
+['L3-03','L3','Rumah 3 Lantai Sempit Memanjang 5x18','Rumah tinggal lahan sempit','Jakarta','Keluarga muda','5 x 18 m','Modern tropis dengan skylight',3,'Dak beton + skylight polikarbonat','Plester putih + kisi vertikal aluminium',['Carport, R. Tamu, Dapur, R. Makan, Taman dalam, KM/WC','R. Keluarga, 2 Kamar Tidur, KM/WC, Void skylight','KT Utama, R. Cuci-jemur, Gudang']],
+['L3-04','L3','Rumah 3 Lantai dengan Rooftop 7x14','Rumah tinggal dengan rooftop','Bandung','Keluarga suka berkumpul','7 x 14 m','Kontemporer',3,'Dak beton rooftop + pergola','Plester abu tua + kayu + kaca',['Carport, R. Tamu, Dapur, R. Makan, KM/WC','KT Utama, 2 Kamar Tidur, KM/WC','R. Santai, Pantry, Rooftop deck, KM/WC']],
+['L3-05','L3','Rumah Multigenerasi 3 Lantai 9x15','Rumah multigenerasi','Tangerang','Keluarga besar 3 generasi','9 x 15 m','Modern minimalis',3,'Dak beton + atap pelana sebagian','Plester putih + batu alam',['Carport, R. Tamu, KT Orang Tua + KM (ramah lansia), Dapur, R. Makan','R. Keluarga, KT Utama + KM, 2 KT Anak, KM/WC','R. Serbaguna, KT Tamu, R. Cuci-jemur, KM/WC']],
+['VIL-01','VIL','Villa Tropis 1 Lantai 12x20','Villa sewa','Ubud, Bali','Pengelola villa','12 x 20 m','Tropis resort',1,'Atap limasan sirap/alang-alang','Batu paras + kayu ulin',['Entrance, Living pavilion terbuka, Pantry, 2 Kamar Tidur + KM semi-outdoor, Kolam renang, Gazebo']],
+['VIL-02','VIL','Villa Tropis 2 Lantai dengan Kolam 15x25','Villa dengan kolam renang','Canggu, Bali','Investor villa','15 x 25 m','Tropis modern',2,'Dak beton + pergola kayu','Beton ekspos, kayu, kaca lebar',['Living, Dining, Dapur, KT Tamu, KM/WC, Kolam renang, Deck','3 Kamar Tidur + KM dalam, Balkon menghadap kolam']],
+['VIL-03','VIL','Rumah Peristirahatan Pegunungan 10x20','Rumah peristirahatan','Lembang','Keluarga kota','10 x 20 m','Cabin kontemporer',1,'Atap pelana curam metal','Kayu + batu kali',['Teras kayu, R. Keluarga + perapian, Dapur, 2 Kamar Tidur, KM/WC, Deck pemandangan']],
+['VIL-04','VIL','Villa Mediterania 14x22','Villa keluarga','Sentul','Keluarga mapan','14 x 22 m','Mediterania',2,'Atap perisai genteng terakota','Plester tekstur putih, lengkung, jendela kayu',['Teras lengkung, Living, Dining, Dapur, KT Tamu, KM/WC, Kolam','KT Utama + KM dalam, 2 Kamar Tidur, Balkon']],
+['VIL-05','VIL','Rumah Tepi Danau 12x18','Rumah peristirahatan tepi danau','Danau Toba','Keluarga perantau','12 x 18 m','Kontemporer terbuka',1,'Atap pelana asimetris','Kaca lebar, kayu, batu',['Deck dermaga, Living, Dapur, 3 Kamar Tidur, 2 KM/WC, Teras menghadap danau']],
+['RUK-01','RUK','Ruko 2 Lantai 5x15','Ruko (rumah toko)','Solo','Pemilik usaha retail','5 x 15 m','Modern komersial',2,'Dak beton + parapet','Kaca toko + rolling door + area signage',['Area usaha, Gudang kecil, KM/WC','R. Keluarga, 2 Kamar Tidur, Dapur, KM/WC']],
+['RUK-02','RUK','Rumah Kantor (Rukan) 3 Lantai 6x15','Rumah kantor','Jakarta','Pemilik usaha jasa','6 x 15 m','Modern minimalis komersial',3,'Dak beton + parapet','Panel ACP + kaca',['Lobby/resepsionis, R. Tunggu, Pantry, KM/WC','R. Kerja terbuka, R. Rapat, KM/WC','R. Direktur, Mess/hunian, KM/WC']],
+['RUK-03','RUK','Rumah Praktik Dokter 2 Lantai 8x15','Rumah dengan ruang praktik dokter','Yogyakarta','Dokter keluarga','8 x 15 m','Modern klinis-hangat',2,'Atap pelana genteng flat','Plester putih + aksen kayu',['R. Tunggu, Pendaftaran, R. Periksa, R. Tindakan, Apotek kecil, KM/WC difabel','R. Keluarga, 3 Kamar Tidur, Dapur, KM/WC']],
+['RUK-04','RUK','Rumah Kos 3 Lantai 8x20','Rumah kos dekat kampus','Malang (dekat kampus)','Investor kos','8 x 20 m','Modern minimalis fungsional',3,'Dak beton + atap metal sebagian','Plester cat + roster',['Parkir motor, R. Pengelola, Dapur bersama, R. Cuci, 3 Kamar kos','8 Kamar kos + KM dalam','8 Kamar kos + KM dalam, Area jemur']],
+['RUK-05','RUK','Rumah Toko & Gudang 2 Lantai 6x18','Rumah toko kelontong dan gudang','Cirebon','Pedagang grosir','6 x 18 m','Sederhana fungsional',2,'Atap pelana metal','Plester polos + roll door',['Area Toko, Gudang, KM/WC','R. Tamu, Dapur, 2 Kamar Tidur, KM/WC']]
+];
+const toObj=r=>({kode:r[0],cat:r[1],nama:r[2],jenis:r[3],lokasi:r[4],owner:r[5],lahan:r[6],gaya:r[7],lantai:r[8],atap:r[9],fasad:r[10],ruang:r[11]});
+const PRESETS=RAW.map(toObj);
+
+/* ===================== STORAGE ===================== */
+const KEY='promptded.mine.v1';
+function loadMine(){try{return JSON.parse(localStorage.getItem(KEY))||[]}catch(e){return []}}
+function saveMine(a){try{localStorage.setItem(KEY,JSON.stringify(a));return true}catch(e){return false}}
+let MINE=loadMine();
+const all=()=>[...PRESETS,...MINE];
+
+/* ===================== PROMPT BUILDER (CRAFT) ===================== */
+const OPT={kertas:'A3 lanskap',bahasa:'Indonesia'};
+const KERTAS={'A3 lanskap':'rasio lembar kertas A3 lanskap (√2 : 1)','A1 lanskap':'rasio lembar kertas A1 lanskap (√2 : 1)','16:9':'rasio layar 16:9 lanskap'};
+
+function elemen(d){
+  const n=+d.lantai||1;
+  const el3 = n===1
+    ? 'DENAH TAPAK (SITE PLAN) skala 1:200 — posisi bangunan di dalam lahan '+d.lahan+', garis sempadan, akses masuk, taman dan arah utara'
+    : n===2
+    ? 'DENAH LANTAI 2 skala 1:100 — dinding tebal hitam, nama dan luas tiap ruang, pintu, jendela, tangga, garis dimensi'
+    : 'DENAH LANTAI 2 & 3 skala 1:100 — dua denah kecil berdampingan dalam satu panel, nama dan luas tiap ruang, tangga, garis dimensi';
+  const pondasi = n===1
+    ? 'pondasi batu kali menerus, sloof beton, urugan pasir, lantai kerja'
+    : 'pondasi footplat beton bertulang + pondasi batu kali menerus, sloof, urugan pasir, lantai kerja';
+  return [
+    'TAMPAK DEPAN — render perspektif 3D fotorealistik eksterior saat senja, dengan leader line keterangan material di sisi kanan',
+    'DENAH LANTAI 1 skala 1:100 — dinding tebal hitam, nama dan luas tiap ruang, pintu, jendela, perabot sederhana, garis dimensi',
+    el3,
+    'DENAH ATAP skala 1:100 — bentuk atap, arah kemiringan, talang dan dimensi keliling',
+    'POTONGAN A-A skala 1:100 — peil ±0.00, elevasi tiap lantai, rangka atap, plafon, tangga dan pondasi',
+    'TAMPAK SAMPING skala 1:100 — garis hitam putih dengan elevasi',
+    'DETAIL ATAP skala 1:20 — lapisan penutup atap, reng, usuk/rangka, gording, talang, plafon, label tiap lapisan',
+    'DETAIL DINDING skala 1:20 — pasangan bata, plester, acian, cat, sloof dan finishing lantai, label tiap lapisan',
+    'DETAIL PONDASI skala 1:20 — '+pondasi,
+    'TABEL SPESIFIKASI MATERIAL — kolom No, Elemen, Material/Finishing, Warna (min. 10 baris: atap, dinding, lantai, kusen, pintu, jendela, plafon, sanitair, pagar, cat)',
+    'TABEL RUANG — kolom No, Lantai, Nama Ruang, Luas (m²), dengan baris total luas bangunan',
+    'CATATAN — catatan umum gambar: satuan dalam milimeter, ukuran dicek ulang di lapangan, spesifikasi mengikuti RKS, gambar struktur mengacu lembar terpisah',
+    'KOP GAMBAR — nama proyek "'+d.nama+'", owner "'+d.owner+'", lokasi "'+d.lokasi+'", judul lembar "DETAIL ENGINEERING DESIGN (DED)", skala, nomor gambar, tanggal, revisi, plus simbol panah utara'
+  ];
+}
+
+function buildPrompt(d,opt=OPT){
+  const n=+d.lantai||1;
+  const els=elemen(d).map((t,i)=>'('+(i+1)+') '+t).join('; ');
+  const ruang=[];
+  for(let i=0;i<n;i++){ if(d.ruang&&d.ruang[i]) ruang.push('Lantai '+(i+1)+': '+d.ruang[i]); }
+  const lbl = opt.bahasa==='English'
+    ? 'Semua label, judul panel dan isi tabel ditulis dalam bahasa Inggris.'
+    : 'Semua label, judul panel dan isi tabel ditulis dalam bahasa Indonesia yang benar ejaannya.';
+  return [
+'[CONTEXT] Anda sedang menyiapkan satu lembar presentasi Detail Engineering Design (DED) arsitektur untuk proyek '+d.jenis+' di '+d.lokasi+', milik '+d.owner+', di atas lahan berukuran '+d.lahan+' dengan gaya arsitektur '+d.gaya+' dan jumlah '+n+' lantai. Atap: '+d.atap+'. Fasad: '+d.fasad+'.',
+'[ROLE] Bertindaklah sebagai arsitek senior sekaligus drafter profesional Indonesia yang terbiasa menyusun gambar kerja rapi sesuai praktik studio arsitektur dan kaidah gambar teknik (SNI).',
+'[ACTION] Buat SATU gambar lembar DED komposit yang memuat tepat 13 panel bernomor berikut: '+els+'.',
+'[FORMAT] Susun ke-13 panel dalam grid 3 baris yang rapi: baris 1 berisi panel 1–4, baris 2 berisi panel 5–10, baris 3 berisi panel 11–13. Setiap panel diberi bingkai tipis, nomor dalam lingkaran dan judul panel beserta skalanya. Latar putih bersih; panel 1 berupa render berwarna, panel lainnya gambar teknik garis hitam tipis bergaya drafting arsitektur profesional Indonesia (garis dimensi dalam mm, leader line lurus, tabel bergaris rapi, teks terbaca). Gunakan '+(KERTAS[opt.kertas]||opt.kertas)+'. '+lbl+' Jika prompt ini dijalankan ulang, pertahankan tata letak grid dan ke-13 panel yang sama persis — variasi kecil pada gaya visual atau pencahayaan wajar, tetapi struktur dan kelengkapan panel tidak boleh berubah.',
+'[TONE] Presisi, rapi, dan meyakinkan seperti dokumen kerja studio arsitektur profesional — bukan sketsa kasar atau moodboard.',
+'',
+'[RINCIAN RUANG PER LANTAI] '+(ruang.join(' | ')||'-')
+  ].join('\n');
+}
+
+/* ===================== UI HELPERS ===================== */
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(toast._t);toast._t=setTimeout(()=>t.classList.remove('show'),1900)}
+async function copyText(txt){
+  try{ if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(txt);toast('Prompt tersalin ✓');return} }catch(e){}
+  const ta=document.createElement('textarea');ta.value=txt;ta.setAttribute('readonly','');ta.style.position='fixed';ta.style.opacity='0';
+  document.body.appendChild(ta);ta.select();ta.setSelectionRange(0,ta.value.length);
+  let ok=false;try{ok=document.execCommand('copy')}catch(e){}
+  ta.remove();toast(ok?'Prompt tersalin ✓':'Gagal menyalin — tekan lama teks lalu Salin');
+}
+async function sharePrompt(txt,title){
+  if(navigator.share){try{await navigator.share({title,text:txt});return}catch(e){if(e.name==='AbortError')return}}
+  copyText(txt);
+}
+
+/* ===================== STATE & ROUTING ===================== */
+const S={tab:'preset',cat:'ALL',q:'',detail:null,editing:null};
+document.querySelectorAll('#tabs button').forEach(b=>b.onclick=()=>{S.tab=b.dataset.tab;S.detail=null;render();window.scrollTo(0,0)});
+
+function render(){
+  document.querySelectorAll('#tabs button').forEach(b=>b.classList.toggle('on',b.dataset.tab===S.tab));
+  const m=$('#main');
+  if(S.tab==='preset') m.innerHTML = S.detail ? viewDetail() : viewList();
+  else if(S.tab==='buat') m.innerHTML = viewForm();
+  else m.innerHTML = viewGuide();
+  bind();
+}
+
+/* ---------- LIST ---------- */
+function viewList(){
+  const cats=['ALL',...Object.keys(CATS).filter(k=>k!=='MY'||MINE.length)];
+  const q=S.q.toLowerCase();
+  const items=all().filter(p=>(S.cat==='ALL'||p.cat===S.cat)&&(!q||[p.kode,p.nama,p.gaya,p.lokasi,p.jenis].join(' ').toLowerCase().includes(q)));
+  const count=k=>k==='ALL'?all().length:all().filter(p=>p.cat===k).length;
+  return `<h2>Pilih preset</h2><p class="sub">Ketuk salah satu preset — prompt lengkap tersusun otomatis.</p>
+  <input class="search" id="q" type="search" placeholder="Cari gaya, kota, ukuran…" value="${esc(S.q)}">
+  <div class="chips">${cats.map(k=>`<button class="chip ${S.cat===k?'on':''}" data-cat="${k}">${k==='ALL'?'Semua':CATS[k]} (${count(k)})</button>`).join('')}</div>
+  <div class="list">${items.length?items.map(p=>`<button class="item" data-open="${esc(p.kode)}"><span class="code">${esc(p.kode)}</span><span><b>${esc(p.nama)}</b><small>${esc(p.gaya)} · ${p.lantai} lt · ${esc(p.lokasi)}</small></span></button>`).join(''):'<div class="empty">Tidak ada preset yang cocok.</div>'}</div>`;
+}
+
+/* ---------- DETAIL ---------- */
+function viewDetail(){
+  const d=all().find(p=>p.kode===S.detail); if(!d){S.detail=null;return viewList()}
+  const n=+d.lantai;
+  const rows=[['Jenis',d.jenis],['Owner',d.owner],['Lokasi',d.lokasi],['Lahan',d.lahan],['Gaya',d.gaya],['Lantai',n+' lantai'],['Atap',d.atap],['Fasad',d.fasad]];
+  for(let i=0;i<n;i++) rows.push(['Ruang Lt.'+(i+1),d.ruang[i]||'-']);
+  const isMine=d.cat==='MY';
+  return `<button class="back" data-back>‹ Kembali ke daftar</button>
+  <div class="card"><h3>${esc(d.kode)} · ${esc(d.nama)}</h3><div class="kv">${rows.map(r=>`<div>${esc(r[0])}</div><div>${esc(r[1])}</div>`).join('')}</div></div>
+  ${optionsHTML()}
+  <textarea class="prompt" id="promptOut" readonly>${esc(buildPrompt(d))}</textarea>
+  <div class="note">Tempel prompt di AI pembuat gambar (mis. ChatGPT, Gemini). Hasil bisa sedikit berbeda tiap generate, tetapi tata letak dan ke-13 panel tetap sama.</div>
+  <div class="row" style="margin-bottom:10px">
+    <button class="btn ghost small" data-edit="${esc(d.kode)}">${isMine?'Ubah preset':'Ubah data (salin ke formulir)'}</button>
+    ${isMine?`<button class="btn ghost small" data-del="${esc(d.kode)}">Hapus</button>`:''}
+    <a class="btn ghost small" href="https://chatgpt.com/" target="_blank" rel="noopener">Buka ChatGPT</a>
+    <a class="btn ghost small" href="https://gemini.google.com/" target="_blank" rel="noopener">Buka Gemini</a>
+  </div>
+  <div class="sticky-actions row">
+    <button class="btn" data-share>Bagikan</button>
+    <button class="btn accent" data-copy style="flex:2">Salin Prompt Lengkap</button>
+  </div>`;
+}
+function optionsHTML(){
+  return `<div class="card">
+    <div class="opt"><label>Format lembar</label><div class="seg">${Object.keys(KERTAS).map(k=>`<button data-kertas="${k}" class="${OPT.kertas===k?'on':''}">${k}</button>`).join('')}</div></div>
+    <div class="opt" style="margin:0"><label>Bahasa label gambar</label><div class="seg">${['Indonesia','English'].map(k=>`<button data-bahasa="${k}" class="${OPT.bahasa===k?'on':''}">${k}</button>`).join('')}</div></div>
+  </div>`;
+}
+
+/* ---------- FORM ---------- */
+const EMPTY={kode:'',cat:'MY',nama:'',jenis:'',lokasi:'',owner:'',lahan:'',gaya:'',lantai:2,atap:'',fasad:'',ruang:['','','']};
+let F={...EMPTY,ruang:[...EMPTY.ruang]};
+function viewForm(){
+  const n=+F.lantai;
+  const fld=(k,l,ph)=>`<div class="f"><label for="f_${k}">${l}</label><input id="f_${k}" data-f="${k}" value="${esc(F[k])}" placeholder="${ph}"></div>`;
+  return `<h2>${S.editing?'Ubah preset saya':'Prompt Buatan Sendiri'}</h2>
+  <p class="sub">Isi data proyek. Struktur 13 panel tetap, hanya data proyek yang berganti.</p>
+  <form id="form" onsubmit="return false">
+    ${fld('nama','Nama proyek','Rumah 2 Lantai Tropis 8x15')}
+    ${fld('jenis','Jenis bangunan','Rumah tinggal / Ruko / Villa')}
+    <div class="grid2">${fld('lokasi','Lokasi','Bandung')}${fld('lahan','Ukuran lahan','8 x 15 m')}</div>
+    ${fld('owner','Owner / pengguna','Keluarga 4 orang')}
+    <div class="grid2">${fld('gaya','Gaya arsitektur','Tropis modern')}
+      <div class="f"><label for="f_lantai">Jumlah lantai</label><select id="f_lantai" data-f="lantai">${[1,2,3].map(i=>`<option ${n===i?'selected':''}>${i}</option>`).join('')}</select></div></div>
+    ${fld('atap','Atap','Atap pelana genteng beton')}
+    ${fld('fasad','Fasad','Plester putih + aksen kayu')}
+    ${[0,1,2].slice(0,n).map(i=>`<div class="f"><label for="f_r${i}">Ruang lantai ${i+1}</label><textarea id="f_r${i}" data-r="${i}" placeholder="Pisahkan dengan koma: Teras, R. Tamu, Dapur…">${esc(F.ruang[i])}</textarea></div>`).join('')}
+  </form>
+  ${optionsHTML()}
+  <textarea class="prompt" id="promptOut" readonly>${esc(buildPrompt(fillDefaults(F)))}</textarea>
+  <div class="row" style="margin-top:10px"><button class="btn ghost small" data-reset>Kosongkan</button><button class="btn green" data-save>${S.editing?'Simpan perubahan':'Simpan ke Preset Saya'}</button></div>
+  <div class="sticky-actions row"><button class="btn" data-share>Bagikan</button><button class="btn accent" data-copy style="flex:2">Salin Prompt Lengkap</button></div>`;
+}
+function fillDefaults(f){
+  const g=(v,d)=>(v&&String(v).trim())||d;
+  return {...f,nama:g(f.nama,'[nama proyek]'),jenis:g(f.jenis,'[jenis bangunan]'),lokasi:g(f.lokasi,'[lokasi]'),owner:g(f.owner,'[owner]'),
+    lahan:g(f.lahan,'[ukuran lahan]'),gaya:g(f.gaya,'[gaya arsitektur]'),atap:g(f.atap,'[jenis atap]'),fasad:g(f.fasad,'[material fasad]'),
+    ruang:f.ruang.map(r=>g(r,'[daftar ruang]'))};
+}
+
+/* ---------- GUIDE ---------- */
+function viewGuide(){
+  const els=['Tampak depan (render 3D)','Denah lantai 1','Denah lt.2 / lt.2&3 / site plan','Denah atap','Potongan A-A','Tampak samping','Detail atap','Detail dinding','Detail pondasi','Tabel spesifikasi material','Tabel ruang','Catatan','Kop gambar'];
+  return `<h2>Cara pakai</h2><p class="sub">Satu file HTML, bisa dibuka di HP tanpa instal aplikasi dan tetap jalan offline.</p>
+  <ol class="steps">
+    <li><b>Pilih preset</b><span>Ada ${PRESETS.length} preset dalam 5 kategori: 1 lantai, 2 lantai, 3 lantai & hook, villa, dan ruko/usaha. Atau isi tab Buat Sendiri.</span></li>
+    <li><b>Atur & salin</b><span>Pilih format lembar dan bahasa label, lalu ketuk <i>Salin Prompt Lengkap</i>.</span></li>
+    <li><b>Tempel di AI pembuat gambar</b><span>Buka ChatGPT, Gemini, atau AI lain yang bisa membuat gambar, tempel prompt, lalu kirim.</span></li>
+    <li><b>Simpan hasil</b><span>Unduh gambar, perbesar untuk cek teks dan angka. Jika ada panel kurang, minta AI "lengkapi panel nomor …".</span></li>
+  </ol>
+  <div class="card"><h3>Struktur prompt (CRAFT)</h3><p style="margin:0">Context · Role · Action (13 panel tetap) · Format · Tone. Hanya data proyek yang berganti, susunan lembar selalu sama.</p></div>
+  <div class="card"><h3>Isi 13 panel</h3><ol class="els">${els.map(e=>`<li>${e}</li>`).join('')}</ol></div>
+  <div class="note"><b>Penting:</b> gambar dari AI adalah ilustrasi/konsep presentasi. Angka, dimensi, dan detail struktur bisa keliru — untuk IMB/PBG dan pelaksanaan tetap gunakan gambar kerja yang diperiksa arsitek dan insinyur struktur berlisensi.</div>
+  <div class="card"><h3>Pasang sebagai aplikasi</h3><p style="margin:0"><b>Android (Chrome):</b> ketuk tombol <i>Pasang di HP</i> di atas, atau menu ⋮ → <i>Tambahkan ke layar utama / Instal aplikasi</i>.<br><b>iPhone (Safari):</b> ketuk tombol Bagikan → <i>Tambah ke Layar Utama</i>.<br>Setelah terpasang, aplikasi muncul sebagai ikon di HP dan tetap bisa dipakai tanpa internet. Preset buatan sendiri tersimpan di HP masing-masing.</p></div>`;
+}
+
+/* ===================== EVENTS ===================== */
+function currentPrompt(){return $('#promptOut')?.value||''}
+function refreshPrompt(){
+  const out=$('#promptOut'); if(!out) return;
+  if(S.tab==='buat') out.value=buildPrompt(fillDefaults(F));
+  else { const d=all().find(p=>p.kode===S.detail); if(d) out.value=buildPrompt(d); }
+}
+function bind(){
+  const m=$('#main');
+  const q=$('#q'); if(q) q.oninput=e=>{S.q=e.target.value;const pos=e.target.selectionStart;render();const n=$('#q');n.focus();n.setSelectionRange(pos,pos)};
+  m.querySelectorAll('[data-cat]').forEach(b=>b.onclick=()=>{S.cat=b.dataset.cat;render()});
+  m.querySelectorAll('[data-open]').forEach(b=>b.onclick=()=>{S.detail=b.dataset.open;render();window.scrollTo(0,0)});
+  m.querySelector('[data-back]')?.addEventListener('click',()=>{S.detail=null;render()});
+  m.querySelectorAll('[data-kertas]').forEach(b=>b.onclick=()=>{OPT.kertas=b.dataset.kertas;m.querySelectorAll('[data-kertas]').forEach(x=>x.classList.toggle('on',x===b));refreshPrompt()});
+  m.querySelectorAll('[data-bahasa]').forEach(b=>b.onclick=()=>{OPT.bahasa=b.dataset.bahasa;m.querySelectorAll('[data-bahasa]').forEach(x=>x.classList.toggle('on',x===b));refreshPrompt()});
+  m.querySelector('[data-copy]')?.addEventListener('click',()=>copyText(currentPrompt()));
+  m.querySelector('[data-share]')?.addEventListener('click',()=>sharePrompt(currentPrompt(),'Prompt DED'));
+  m.querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>{
+    const d=all().find(p=>p.kode===b.dataset.edit);
+    F={...d,ruang:[...d.ruang,'','',''].slice(0,3)};
+    S.editing=d.cat==='MY'?d.kode:null;
+    if(!S.editing){F.cat='MY';F.nama=d.nama+' (salinan)'}
+    S.tab='buat';S.detail=null;render();window.scrollTo(0,0);
+  });
+  m.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{
+    if(!b.dataset.armed){b.dataset.armed='1';b.textContent='Ketuk lagi untuk hapus';setTimeout(()=>{if(b.isConnected){delete b.dataset.armed;b.textContent='Hapus'}},3000);return}
+    MINE=MINE.filter(p=>p.kode!==b.dataset.del);saveMine(MINE);S.detail=null;if(!MINE.length&&S.cat==='MY')S.cat='ALL';render();toast('Preset dihapus');
+  });
+  // form
+  m.querySelectorAll('[data-f]').forEach(el=>el.addEventListener('input',e=>{
+    const k=el.dataset.f;F[k]=k==='lantai'?+el.value:el.value;
+    if(k==='lantai'){render();return}
+    refreshPrompt();
+  }));
+  m.querySelectorAll('[data-r]').forEach(el=>el.addEventListener('input',()=>{F.ruang[+el.dataset.r]=el.value;refreshPrompt()}));
+  m.querySelector('[data-reset]')?.addEventListener('click',()=>{F={...EMPTY,ruang:['','','']};S.editing=null;render()});
+  m.querySelector('[data-save]')?.addEventListener('click',()=>{
+    if(!F.nama.trim()){toast('Isi nama proyek dulu');$('#f_nama').focus();return}
+    const rec={...fillDefaults(F),cat:'MY',lantai:+F.lantai,ruang:F.ruang.slice(0,+F.lantai)};
+    if(S.editing){rec.kode=S.editing;MINE=MINE.map(p=>p.kode===S.editing?rec:p)}
+    else{let i=MINE.length+1,k;do{k='MY-'+String(i++).padStart(2,'0')}while(MINE.some(p=>p.kode===k));rec.kode=k;MINE.push(rec)}
+    const ok=saveMine(MINE);
+    S.tab='preset';S.cat='MY';S.detail=rec.kode;S.editing=null;F={...EMPTY,ruang:['','','']};render();window.scrollTo(0,0);
+    toast(ok?'Tersimpan di Preset Saya ✓':'Tersimpan sementara (browser tidak mengizinkan penyimpanan)');
+  });
+}
+render();
+
+/* ===================== PWA ===================== */
+if('serviceWorker' in navigator && location.protocol.startsWith('http')){
+  window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+}
+let deferredInstall=null;
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredInstall=e;$('#installBtn').hidden=false});
+$('#installBtn').onclick=async()=>{
+  if(!deferredInstall)return;
+  deferredInstall.prompt();
+  const r=await deferredInstall.userChoice.catch(()=>null);
+  deferredInstall=null;$('#installBtn').hidden=true;
+  if(r&&r.outcome==='accepted')toast('Aplikasi dipasang ✓');
+};
+window.addEventListener('appinstalled',()=>{$('#installBtn').hidden=true});
+</script>
+</body>
+</html>

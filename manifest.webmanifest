@@ -1,0 +1,17 @@
+{
+  "name": "Prompt DED Arsitek",
+  "short_name": "Prompt DED",
+  "description": "Generator prompt lembar DED arsitektur: 25 preset dan formulir prompt buatan sendiri.",
+  "lang": "id",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f1ece2",
+  "theme_color": "#233b57",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
