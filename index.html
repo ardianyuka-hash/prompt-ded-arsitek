@@ -62,6 +62,9 @@ h2{font-size:20px;margin:0 0 4px}
 .btn.green{background:var(--green)}
 .btn.ghost{background:transparent;border:1px solid var(--line);color:var(--ink);font-weight:600}
 .btn.small{padding:10px 12px;font-size:14px;flex:0 1 auto}
+.ai-box{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:12px}
+.ai-title{font-size:14px;color:var(--muted);margin-bottom:8px}
+.ai-box .ai{flex:1 1 30%;text-align:center}
 .back{background:none;border:0;color:var(--accent);font-weight:700;padding:0;margin-bottom:10px;cursor:pointer}
 .opt{display:flex;flex-direction:column;gap:6px;margin-bottom:10px}
 .opt label{font-size:14px;color:var(--muted)}
@@ -244,17 +247,20 @@ function viewDetail(){
   <div class="card"><h3>${esc(d.kode)} · ${esc(d.nama)}</h3><div class="kv">${rows.map(r=>`<div>${esc(r[0])}</div><div>${esc(r[1])}</div>`).join('')}</div></div>
   ${optionsHTML()}
   <textarea class="prompt" id="promptOut" readonly>${esc(buildPrompt(d))}</textarea>
-  <div class="note">Tempel prompt di AI pembuat gambar (mis. ChatGPT, Gemini). Hasil bisa sedikit berbeda tiap generate, tetapi tata letak dan ke-13 panel tetap sama.</div>
+  <div class="note">Tempel prompt di aplikasi AI (mis. Claude, ChatGPT, Gemini). Hasil bisa sedikit berbeda tiap generate, tetapi tata letak dan ke-13 panel tetap sama.</div>
+  ${aiLinks()}
   <div class="row" style="margin-bottom:10px">
     <button class="btn ghost small" data-edit="${esc(d.kode)}">${isMine?'Ubah preset':'Ubah data (salin ke formulir)'}</button>
     ${isMine?`<button class="btn ghost small" data-del="${esc(d.kode)}">Hapus</button>`:''}
-    <a class="btn ghost small" href="https://chatgpt.com/" target="_blank" rel="noopener">Buka ChatGPT</a>
-    <a class="btn ghost small" href="https://gemini.google.com/" target="_blank" rel="noopener">Buka Gemini</a>
   </div>
   <div class="sticky-actions row">
     <button class="btn" data-share>Bagikan</button>
     <button class="btn accent" data-copy style="flex:2">Salin Prompt Lengkap</button>
   </div>`;
+}
+const AI=[['Claude','https://claude.ai/new'],['ChatGPT','https://chatgpt.com/'],['Gemini','https://gemini.google.com/']];
+function aiLinks(){
+  return `<div class="ai-box"><div class="ai-title">Salin prompt &amp; buka aplikasi AI</div><div class="row">${AI.map(([n,u])=>`<a class="btn ghost small ai" data-ai="${n}" href="${u}" target="_blank" rel="noopener">Buka ${n}</a>`).join('')}</div></div>`;
 }
 function optionsHTML(){
   return `<div class="card">
@@ -284,6 +290,7 @@ function viewForm(){
   </form>
   ${optionsHTML()}
   <textarea class="prompt" id="promptOut" readonly>${esc(buildPrompt(fillDefaults(F)))}</textarea>
+  <div style="margin-top:10px">${aiLinks()}</div>
   <div class="row" style="margin-top:10px"><button class="btn ghost small" data-reset>Kosongkan</button><button class="btn green" data-save>${S.editing?'Simpan perubahan':'Simpan ke Preset Saya'}</button></div>
   <div class="sticky-actions row"><button class="btn" data-share>Bagikan</button><button class="btn accent" data-copy style="flex:2">Salin Prompt Lengkap</button></div>`;
 }
@@ -301,7 +308,7 @@ function viewGuide(){
   <ol class="steps">
     <li><b>Pilih preset</b><span>Ada ${PRESETS.length} preset dalam 5 kategori: 1 lantai, 2 lantai, 3 lantai & hook, villa, dan ruko/usaha. Atau isi tab Buat Sendiri.</span></li>
     <li><b>Atur & salin</b><span>Pilih format lembar dan bahasa label, lalu ketuk <i>Salin Prompt Lengkap</i>.</span></li>
-    <li><b>Tempel di AI pembuat gambar</b><span>Buka ChatGPT, Gemini, atau AI lain yang bisa membuat gambar, tempel prompt, lalu kirim.</span></li>
+    <li><b>Tempel di AI pembuat gambar</b><span>Ketuk <i>Buka Claude</i>, <i>Buka ChatGPT</i>, atau <i>Buka Gemini</i> — prompt otomatis tersalin. Tempel di kolom chat, lalu kirim.</span></li>
     <li><b>Simpan hasil</b><span>Unduh gambar, perbesar untuk cek teks dan angka. Jika ada panel kurang, minta AI "lengkapi panel nomor …".</span></li>
   </ol>
   <div class="card"><h3>Struktur prompt (CRAFT)</h3><p style="margin:0">Context · Role · Action (13 panel tetap) · Format · Tone. Hanya data proyek yang berganti, susunan lembar selalu sama.</p></div>
@@ -326,6 +333,7 @@ function bind(){
   m.querySelectorAll('[data-kertas]').forEach(b=>b.onclick=()=>{OPT.kertas=b.dataset.kertas;m.querySelectorAll('[data-kertas]').forEach(x=>x.classList.toggle('on',x===b));refreshPrompt()});
   m.querySelectorAll('[data-bahasa]').forEach(b=>b.onclick=()=>{OPT.bahasa=b.dataset.bahasa;m.querySelectorAll('[data-bahasa]').forEach(x=>x.classList.toggle('on',x===b));refreshPrompt()});
   m.querySelector('[data-copy]')?.addEventListener('click',()=>copyText(currentPrompt()));
+  m.querySelectorAll('[data-ai]').forEach(a=>a.addEventListener('click',()=>{copyText(currentPrompt());setTimeout(()=>toast('Prompt tersalin — tempel di '+a.dataset.ai),300)}));
   m.querySelector('[data-share]')?.addEventListener('click',()=>sharePrompt(currentPrompt(),'Prompt DED Arsitektural 2027'));
   m.querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>{
     const d=all().find(p=>p.kode===b.dataset.edit);

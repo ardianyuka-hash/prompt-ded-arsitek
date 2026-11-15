@@ -1,5 +1,5 @@
 // Naikkan versi ini setiap kali file aplikasi diubah agar HP mengambil versi baru.
-const CACHE = 'prompt-ded-v2';
+const CACHE = 'prompt-ded-v3';
 const FILES = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './apple-touch-icon.png'];
 
 self.addEventListener('install', e => {
